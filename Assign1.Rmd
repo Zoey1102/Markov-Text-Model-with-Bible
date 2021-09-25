@@ -1,0 +1,29 @@
+---
+title: "A_Markov_Text_Model"
+author: "Group9"
+date: "25/09/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+#getwd()
+#setwd()
+a <- scan("1581-0.txt",what="character",skip=156)
+n <- length(a)
+a <- a[-((n-2909):n)] ## strip license
+```
+
+```{r}
+split_punct <- function(){
+  
+}
+```
+
+```{r}
+split_punct(a)
+```
+
