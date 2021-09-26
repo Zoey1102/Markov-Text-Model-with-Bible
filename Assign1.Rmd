@@ -10,6 +10,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ```{r}
+# Read the text file
 #getwd()
 #setwd()
 a <- scan("1581-0.txt",what="character",skip=156)
@@ -18,23 +19,18 @@ a <- a[-((n-2909):n)] ## strip license
 ```
 
 ```{r}
+# Write the function to split punctuation marks
 split_punct <- function(x){
   # use a-f to store the location information of punctuation
   a <- grep(",",x)
   # length(a) != 0 means that here are some "," in x, then go next step
   if(length(a) != 0){
-    # remove ","
-    x <- gsub(",","",x)
-    # use as to store the position of "," in the new vector
-    as <- a + 1:length(a)
-    # create a new empty vector
-    xs_a <- rep("",length(x)+length(a))
-    # insert ","
-    xs_a[as] <- c(",")
-    # insert the origin x
-    xs_a[-as] <- x
-    # update x
-    x <- xs_a
+    x <- gsub(",","",x) # remove ","
+    as <- a + 1:length(a) ## use as to store the position of "," in the new vector
+    xs_a <- rep("",length(x)+length(a)) ## create a new empty vector
+    xs_a[as] <- c(",") ## insert ","
+    xs_a[-as] <- x ## insert the origin x
+    x <- xs_a ## update x
   }
   # following code are similar to the previous code so I will not attach more note
   b <- grep("\\.",x)
@@ -87,22 +83,25 @@ split_punct <- function(x){
 ```
 
 ```{r}
-# apply the split_punct to a
+# Apply the split function to the text file a
 split.a <- split_punct(a)
 ```
 
 ```{r}
-lower.a <- tolower(split.a)
-unique.a <- unique(lower.a)
-index <- match(lower.a,unique.a)
-freq <- tabulate(index)
-words_df <- data.frame(words = unique.a,
-                       words_freq = freq)
-order_words_df <- words_df[order(words_df$words_freq, decreasing = TRUE),]
-threshold <- order_words_df[1000,2]
-b <- subset(order_words_df[1], order_words_df$words_freq >= threshold)
+lower.a <- tolower(split.a) ## lower all the words
+unique.a <- unique(lower.a) ## find the unique words in text
+index <- match(lower.a,unique.a) ## match each words in text back to the unique words
+freq <- tabulate(index) ## find the frequency of each words
+words_df <- data.frame(words = unique.a, ##  combine the unique words with ites frequencies in a data frame
+                       words_freq = freq) 
+order_words_df <- words_df[order(words_df$words_freq, decreasing = TRUE),] ## order the data frame by frequency
+m = 1000 ## consider 1000 most common words
+threshold <- order_words_df[m,2] ## find the frequency threshold
+
+# Creat vector b with 1000 most commonly occurring words
+b <- subset(order_words_df[1], order_words_df$words_freq >= threshold) ## subset with the threshold
 rownames(b) <- NULL
 colnames(b) <- NULL
-b <- as.matrix(b)
+b <- as.matrix(b) ## change the data frame into a matrix
 ```
 
