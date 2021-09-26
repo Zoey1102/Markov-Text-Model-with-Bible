@@ -100,7 +100,7 @@ words_df <- data.frame(words = unique.a,
                        words_freq = freq)
 order_words_df <- words_df[order(words_df$words_freq, decreasing = TRUE),]
 threshold <- order_words_df[1000,2]
-b <- subset(order_words_df[1], order_words_df$words_freq >= 90)
+b <- subset(order_words_df[1], order_words_df$words_freq >= threshold)
 rownames(b) <- NULL
 colnames(b) <- NULL
 b <- as.matrix(b)
