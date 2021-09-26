@@ -3,41 +3,68 @@ n <- length(a)
 a<- a[-((n-2909:n))]
 split_punct <- function(x)
 {
-  #create an empty vector to store the final result
-  result<-c()
-  #use a-f to store the location information of punctuation
+# use a-f to store the location information of punctuation
   a <- grep(",",x)
-  b <- grep("\\.",x)
-  c <- grep(";",x)
-  d <- grep("!",x)
-  e <- grep(":",x)
-  f <- grep("\\?",x)
-  #remove the punctuation from the text
-  x <- gsub(",","",x)
-  x <- gsub("\\.","",x)
-  x <- gsub(";","",x)
-  x <- gsub("!","",x)
-  x <- gsub(":","",x)
-  x <- gsub("\\?","",x)
-  #use pos to store the position of all the punctuation mark
-  pos <- c(a,b,c,d,e,f)
-  pos_new <- sort(pos)
-  #j as a start point of index,and give the initial value 1
-  j=1
-  for (i in pos_new)
-  {
-    #the following conditional statement means to add corresponding punctuation
-    #following the words
-    if (i %in% a) result<-c(result,x[j:i],",")
-    if (i %in% b) result<-c(result,x[j:i],".")
-    if (i %in% c) result<-c(result,x[j:i],";")
-    if (i %in% d) result<-c(result,x[j:i],"!")
-    if (i %in% e) result<-c(result,x[j:i],":")
-    if (i %in% f) result<-c(result,x[j:i],"?")
-    #update j
-    j=i+1
+  # length(a) != 0 means that here are some "," in x, then go next step
+  if(length(a) != 0){
+    # remove ","
+    x <- gsub(",","",x)
+    # use as to store the position of "," in the new vector
+    as <- a + 1:length(a)
+    # create a new empty vector
+    xs_a <- rep("",length(x)+length(a))
+    # insert ","
+    xs_a[as] <- c(",")
+    # insert the origin x
+    xs_a[-as] <- x
+    # update x
+    x <- xs_a
   }
-  #add remaining words to the tail of 'result'
-  if(pos_new[length(pos_new)]!=length(x))result<-c(result,x[pos_new[length(pos_new)]:length(x)])
-  return(result)
+  # following code are similar to the previous code so I will not attach more note
+  b <- grep("\\.",x)
+  if(length(b) != 0){
+    x <- gsub("\\.","",x)
+    bs <- b + 1:length(b)
+    xs_b <- rep("",length(x)+length(b))
+    xs_b[bs] <- c(".")
+    xs_b[-bs] <- x
+    x <- xs_b
+  }
+  c <- grep(";",x)
+  if(length(c) != 0){
+    x <- gsub(";","",x)
+    cs <- c + 1:length(c)
+    xs_c <- rep("",length(x)+length(c))
+    xs_c[cs] <- c(".")
+    xs_c[-cs] <- x
+    x <- xs_c
+  }
+  d <- grep("!",x)
+  if(length(d) != 0){
+    x <- gsub("!","",x)
+    ds <- d + 1:length(d)
+    xs_d <- rep("",length(x)+length(d))
+    xs_d[ds] <- c("!")
+    xs_d[-ds] <- x
+    x <- xs_d
+  }
+  e <- grep(":",x)
+  if(length(e) != 0){
+    x <- gsub(":","",x)
+    es <- e + 1:length(e)
+    xs_e <- rep("",length(x)+length(e))
+    xs_e[es] <- c(":")
+    xs_e[-es] <- x
+    x <- xs_e
+  }
+  f <- grep("\\?",x)
+  if(length(f) != 0){
+    x <- gsub("\\?","",x)
+    fs <- f + 1:length(f)
+    xs_f <- rep("",length(x)+length(f))
+    xs_f[fs] <- c("?")
+    xs_f[-fs] <- x
+    x <- xs_f
+  }
+  return(x)
 }
