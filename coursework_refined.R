@@ -50,10 +50,10 @@ sum(order_words_df$words_freq >= threshold)  ## 1004
 sum(order_words_df$words_freq > threshold)  ## 995
 
 # The 1004 most commonly occurring words is therefore:
-b_df <- subset(order_words_df[1], order_words_df$words_freq >= threshold) ## subset with the threshold
+b_df <- subset(order_words_df, order_words_df$words_freq >= threshold) ## subset with the threshold
 #rownames(b_df) <- NULL
 #colnames(b_df) <- NULL
-b <- as.matrix(b_df) ## change the data frame into a matrix/vector
+b <- as.matrix(b_df[1]) ## change the data frame into a matrix/vector
 
 
 
@@ -73,8 +73,8 @@ colnames(pair_valid) <- c("Now", "Next")
 # the A matrix is given by f_vector by Transpose(f_vector)
 #A <- f_vector %*% t(f_vector)
 
-A <- matrix(rep(0, 1004*1004), 1004, 1004) # Initializing A
-for (i in 1:1004){
+A <- matrix(rep(0, length(b)*length(b)), length(b), length(b)) # Initializing A
+for (i in 1:length(b)){
   subA <- pair_valid[pair_valid[, "Now"]==i,] ## find all the 'i' Now words in pair_valid and make a subset
   for (j in subA[,2]){ ## extract the Next word
     A[i,j] = A[i,j] + 1 ## pairs adding a 1 to A[i,j]
@@ -85,4 +85,23 @@ for (i in 1:1004){
 
 
 
+capital.a <- split.a[!is.na(ib)]
+unique.cap <- unique(capital.a)
+index.cap <- match(capital.a, unique.cap) 
+freq.cap <- tabulate(index.cap)
+capital_df <- data.frame(words = unique.cap,
+                         capital_freq = freq.cap)
+icap <- match(capital_df[,1],b)
+capital_only <- subset(capital_df, is.na(capital_df[,1][icap]))
+ilow <- match(tolower(capital_only[,1]),b)
+lower_only <- subset(b_df[ilow,])
+captial_lower <- cbind(capital_only, lower_only)
+captial_lower$Capital <- ifelse(2*captial_lower$capital_freq > captial_lower$words_freq, 'True', 'False')
+icap_true <- match(captial_lower[,3][captial_lower$Capital=='True'],b)
+b_df$Capital <- ifelse(rownames(data.frame(rownames(b_df))) %in% icap_true, 'True', 'False')
+for (i in 1:length(b)){
+  if (b_df$Capital[i]=='True'){
+    b_df[i,1] <- gsub('(^|[[:space:]])([[:alpha:]])', '\\1\\U\\2', b_df[i,1], perl=T) 
+    }
+}
 
