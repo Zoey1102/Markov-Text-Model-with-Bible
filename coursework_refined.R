@@ -84,22 +84,24 @@ for (i in 1:length(b)){
 }
 
 
-
-capital.a <- split.a[!is.na(ib)]
-unique.cap <- unique(capital.a)
-index.cap <- match(capital.a, unique.cap) 
-freq.cap <- tabulate(index.cap)
-capital_df <- data.frame(words = unique.cap,
+capital.a <- split.a[!is.na(ib)] ## find common words in original a who are might be capital
+unique.cap <- unique(capital.a) ## unique capital common wards
+index.cap <- match(capital.a, unique.cap) ## find the index
+freq.cap <- tabulate(index.cap) ## find the frequency
+capital_df <- data.frame(words = unique.cap, ## create a dataframe store all these words
                          capital_freq = freq.cap)
-icap <- match(capital_df[,1],b)
-capital_only <- subset(capital_df, is.na(capital_df[,1][icap]))
-ilow <- match(tolower(capital_only[,1]),b)
-lower_only <- subset(b_df[ilow,])
-captial_lower <- cbind(capital_only, lower_only)
-captial_lower$Capital <- ifelse(2*captial_lower$capital_freq > captial_lower$words_freq, 'True', 'False')
-icap_true <- match(captial_lower[,3][captial_lower$Capital=='True'],b)
-b_df$Capital <- ifelse(rownames(data.frame(rownames(b_df))) %in% icap_true, 'True', 'False')
-for (i in 1:length(b)){
+icap <- match(capital_df[,1],b) ## match these possible capital words back to b to find corresponding index
+capital_only <- subset(capital_df, is.na(capital_df[,1][icap])) ## Find subset of all the words with capital letter
+ilow <- match(tolower(capital_only[,1]),b) ##find the lower form of capital words in a
+lower_only <- subset(b_df[ilow,]) ## create a df indcluding all words who has capital words
+captial_lower <- cbind(capital_only, lower_only) ## combine the corresponding capital words and its lower
+
+## Mark ture if the capital frequency is greater than half of the whole words frequence 
+## i.e. mark tru if the capital frequency is greater than the lower frequency
+captial_lower$Capital <- ifelse(captial_lower$capital_freq > captial_lower$words_freq/2, 'True', 'False')  
+icap_true <- match(captial_lower[,3][captial_lower$Capital=='True'],b) ## match those words should be capitalized back into b
+b_df$Capital <- ifelse(rownames(data.frame(rownames(b_df))) %in% icap_true, 'True', 'False') ## create a new column containing if the word should be capitalize
+for (i in 1:length(b)){ ## initial capitalize all the words 
   if (b_df$Capital[i]=='True'){
     b_df[i,1] <- gsub('(^|[[:space:]])([[:alpha:]])', '\\1\\U\\2', b_df[i,1], perl=T) 
     }
