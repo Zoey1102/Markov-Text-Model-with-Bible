@@ -33,7 +33,7 @@ split.a <- split_punct(a) |>     ## stable version Base R pipe |> since R-4.1
 
 
 # To find the vector of unique words:
-lower.a <- tolower(split.a) ## bring all words to lower case
+lower.a <- tolower(iconv(split.a,"WINDOWS-1252", "UTF-8")) ## bring all words to lower case
 unique.a <- unique(lower.a) 
 # Indices of those unique words corresponding to each words in text
 index <- match(lower.a, unique.a) 
@@ -46,8 +46,8 @@ words_df <- data.frame(words = unique.a, ##  combine the unique words with it's 
 order_words_df <- words_df[order(words_df$words_freq, decreasing = TRUE),] ## order the data frame by frequency
 m = 1000 ## consider 1000 most common words
 threshold <- order_words_df[m,2] ## the threshold number of occurrences is 90
-sum(order_words_df$words_freq >= 90)  ## 1004
-sum(order_words_df$words_freq > 90)  ## 995
+sum(order_words_df$words_freq >= threshold)  ## 1004
+sum(order_words_df$words_freq > threshold)  ## 995
 
 # The 1004 most commonly occurring words is therefore:
 b_df <- subset(order_words_df[1], order_words_df$words_freq >= threshold) ## subset with the threshold
@@ -74,11 +74,14 @@ colnames(pair_valid) <- c("Now", "Next")
 #A <- f_vector %*% t(f_vector)
 
 A <- matrix(rep(0, 1004*1004), 1004, 1004) # Initializing A
-For (i = 1:1004){
-  j_number <- unique(subset(pair_valid[,2], pair_valid[,1] == i))
-  
+for (i in 1:1004){
+  subA <- pair_valid[pair_valid[, "Now"]==i,] ## find all the 'i' Now words in pair_valid and make a subset
+  for (j in subA[,2]){ ## extract the Next word
+    A[i,j] = A[i,j] + 1 ## pairs adding a 1 to A[i,j]
+  }
+  n <- nrow(subA) ## find the sum of each row i
+  A[i,] <- A[i,]/n ## standardize the ith row of A, sum to 1
 }
-
 
 
 
