@@ -83,7 +83,20 @@ for (i in 1:length(b)){
   A[i,] <- A[i,]/n ## standardize the ith row of A, sum to 1
 }
 
+cat = c(rep(0,50)) ## create an empty vectot
+j = sample(1:length(b),size = 1) ## sample the index of the first word in b
+cat[1] = b[j] ## append corespending word to cat
+# using every row in A as probability to sample the next word
+for (i in 1:49){
+  content.index = sample(1:length(b),size = 1,prob = A[j,])
+  cat[i+1] = b[content.index]
+  j = content.index
+}
+cat = paste(cat[1:50],collapse=" ") ## integrate all words into one string
+print(cat)
 
+########################################################
+# question 9
 capital.a <- split.a[!is.na(ib)] ## find common words in original a who are might be capital
 unique.cap <- unique(capital.a) ## unique capital common wards
 index.cap <- match(capital.a, unique.cap) ## find the index
@@ -107,3 +120,14 @@ for (i in 1:length(b)){ ## initial capitalize all the words
     }
 }
 
+# using b_df to replace b and we get the string including the capital letters
+cat = c(rep(0,50))
+j = sample(1:length(b),size = 1)
+cat[1] = b[j]
+for (i in 1:49){
+  content.index = sample(1:length(b),size = 1,prob = A[j,])
+  cat[i+1] = b_df[content.index,1]
+  j = content.index
+}
+cat = paste(cat[1:50],collapse=" ")
+print(cat)
