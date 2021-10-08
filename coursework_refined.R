@@ -131,3 +131,10 @@ for (i in 1:49){
 }
 cat = paste(cat[1:50],collapse=" ")
 print(cat)
+
+#Output text example 1: 
+##"cut off ; and they shall live with blood shall bring the Lord hath not pass by the saints of all things , and 
+##the whole house , and with them into the multitude of Joab , he shall be a man . and the Lord hath shall have walked"
+#Output text example 2:
+## "committed any city of the destruction . their heads and would come to his house of this is not good man or among 
+##the evils of men were with oil in the door of them : . the left not to him in that is an end , not be"
