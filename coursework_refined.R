@@ -1,3 +1,8 @@
+# teammember information:
+# s2251731 Hongxuan ZHU
+# s2258945 Zheyi SHEN
+# s2157323 Chang LU
+
 # Import Data directly (just FYI)
 # install.packages("gutenbergr"); library(gutenbergr)
 # bible <- gutenberg_download(1581)
