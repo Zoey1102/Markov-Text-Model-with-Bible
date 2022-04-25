@@ -1,2 +1,4 @@
-# StatisticalProgramming_Group9
-The first coursework of statistical programming(Markov text model), main code in coursework_refined.R.
+# Project Overview
+Apply Markov text model to analyse the Gutenberg Bible (https://en.wikipedia.org/wiki/Gutenberg_Bible), main code in coursework_refined.R. 
+
+We write a Markov chain text generator to emulate the Gutenberg Bible to see if the sentence generated thereby could be distinguished by the computer afterwards.
